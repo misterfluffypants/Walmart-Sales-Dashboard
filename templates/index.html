@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Walmart Sales Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<header>
+  <h1>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/60/Walmart_spark_%282025%29.svg" alt="Walmart Logo">
+    Walmart Sales Dashboard
+  </h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#">Reports</a>
+    <a href="#">About</a>
+  </nav>
+</header>
+
+<main class="main-container">
+
+  <!-- Graph -->
+  <section class="card chart">
+    <h2>Sales Regression Visualization</h2>
+    {{ plot_html | safe }}
+  </section>
+
+  <!-- Prediction Form -->
+  <section class="card">
+  <h2>Predict Weekly Sales</h2>
+  <form action="/" method="post" class="form-grid">
+    <div>
+      <label>Date:</label>
+      <input type="date" name="date" required>
+    </div>
+    <div>
+      <label>Holiday Flag (0 or 1):</label>
+      <input type="number" name="holiday_flag" step="1" required>
+    </div>
+    <div>
+      <label>Temperature (°F):</label>
+      <input type="number" name="temperature" step="0.01" required>
+    </div>
+    <div>
+      <label>Fuel Price ($):</label>
+      <input type="number" name="fuel_price" step="0.001" required>
+    </div>
+    <div>
+      <label>CPI:</label>
+      <input type="number" name="cpi" step="0.001" required>
+    </div>
+    <div>
+      <label>Unemployment (%):</label>
+      <input type="number" name="unemployment" step="0.001" required>
+    </div>
+    <button type="submit">Predict</button>
+  </form>
+
+  {% if prediction_text %}
+  <h3>{{ prediction_text }}</h3>
+  {% endif %}
+  </section>
+
+  <!-- Data Table -->
+  <section class="card">
+    <h2>Walmart Sales Data</h2>
+
+    <div class="page-info" id="page-info-top"></div>
+
+    <table id="sales-table">
+      <thead>
+      <tr>
+        <th>Store</th>
+        <th>Date</th>
+        <th>Weekly Sales</th>
+        <th>Holiday Flag</th>
+        <th>Temperature</th>
+        <th>Fuel Price</th>
+        <th>CPI</th>
+        <th>Unemployment</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for row in table_data %}
+      <tr>
+        <td>{{ row['Store'] }}</td>
+        <td>{{ row['Date'] }}</td>
+        <td>{{ row['Weekly_Sales'] }}</td>
+        <td>{{ row['Holiday_Flag'] }}</td>
+        <td>{{ row['Temperature'] }}</td>
+        <td>{{ row['Fuel_Price'] }}</td>
+        <td>{{ row['CPI'] }}</td>
+        <td>{{ row['Unemployment'] }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button id="prev-page">⬅ Back</button>
+      <button id="next-page">Next ➡</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Walmart Sales Prediction © 2025 — Powered by Linear Regression
+</footer>
+
+<script src="../static/javascript/js.js"></script>
+</body>
+</html>
